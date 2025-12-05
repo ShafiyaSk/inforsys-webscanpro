@@ -1,67 +1,82 @@
 # Inforsys WebScanPro
 
 Inforsys WebScanPro is an automated web vulnerability scanner built using Python.  
-It detects common web security issues such as **SQL Injection**, **XSS**, and **IDOR**, and generates a professional **HTML Security Report**.  
-The tool includes a Python crawler, vulnerability modules, and Docker environments (DVWA, Juice Shop, bWAPP) for safe testing.
+It identifies common web application security issues such as **SQL Injection**, **Cross-Site Scripting (XSS)** and **Insecure Direct Object References (IDOR)**.  
+The tool also generates a detailed **HTML Security Report** with findings and an executive summary.
+
+---
 
 ## 🚀 Features
 
 - Automated crawling of pages, links, and forms  
 - SQL Injection detection  
-- Cross-Site Scripting (XSS) detection  
-- IDOR vulnerability detection  
+- XSS (Cross-Site Scripting) detection  
+- IDOR detection  
 - HTML security report generation  
-- Docker support for vulnerable test apps  
-- Fast and optimized scanning  
-- Modular design for easy extension  
+- Supports testing in safe, isolated Docker environments  
+- Modular design — easy to extend with new vulnerability checks  
 
 ---
 
-## 📁 Project Structure
+## 🐳 Docker Setup (Optional for Testing)
 
-inforsys-webscanpro/
-│── crawler/
-│ ├── spider.py
-│ ├── utils.py
-│── scanners/
-│ ├── sql_injection.py
-│ ├── xss.py
-│ ├── idor.py
-│── reports/
-│ ├── report_generator.py
-│── docker/
-│ ├── dvwa-compose.yml
-│ ├── juice-shop.yml
-│── main.py
-│── requirements.txt
-│── README.md
+### Start DVWA  
+```bash
+docker-compose -f docker/dvwa-compose.yml up --build
+Start Juice Shop
+bash
+Copy code
+docker-compose -f docker/juice-shop.yml up --build
+Start bWAPP
+bash
+Copy code
+docker run -p 80:80 raesene/bwapp
+▶️ Running WebScanPro
+Install requirements:
+bash
+Copy code
+pip install -r requirements.txt
+Run a scan:
+bash
+Copy code
+python main.py --url http://example.com
+Output:
+A detailed HTML security report will be generated at:
 
-📊 Security Report Output
+bash
+Copy code
+reports/security_report.html
+🧪 Vulnerabilities Detected
+🔹 SQL Injection
+Detects unsafe SQL query patterns using standard payloads such as:
+' OR 1=1 --
 
-Generated file:
-security_report.html
+🔹 Cross-Site Scripting (XSS)
+Detects reflected input-based XSS using payloads like:
+<script>alert(1)</script>
 
-Includes:
+🔹 IDOR
+Checks for insecure access to resources through predictable object identifiers.
 
-Vulnerability summary
+📘 Learning & Development Modules (Project Workflow)
+Week	Module	Description
+Week 1	Crawler	Extract URLs, forms, and inputs
+Week 2	SQL Injection	Implement SQLi detection
+Week 3	XSS	Implement XSS detection
+Week 4	IDOR	Detect insecure resource access
+Week 5	Docker	Setup DVWA, Juice Shop, bWAPP
+Week 6	Reporting	Generate HTML security reports
+Week 7	Integration	Combine all modules into WebScanPro
 
-Impact level
+🎯 Purpose & Real-World Use
+Learning ethical hacking and cybersecurity
 
-Affected URLs
+Scanning web apps in a safe environment
 
-Executive summary
+Developer security testing
 
-🎯 Real-Time Uses
-
-Student cybersecurity training
-
-Web application penetration testing
-
-Developer security analysis
-
-Safe testing on Docker vulnerable apps
+Hands-on practice with vulnerable apps using Docker
 
 📝 Conclusion
-
-Inforsys WebScanPro is a powerful and beginner-friendly automated scanner for learning and testing web vulnerabilities.
-Its modular structure, Docker support, and detailed reporting make it ideal for security learning and research.
+Inforsys WebScanPro is a simple yet powerful automated security testing tool suitable for students, beginners, and developers.
+Its modular design, detailed reports, and optional Docker support make it ideal for learning and real-world testing.
