@@ -1,0 +1,13 @@
+requests
+beautifulsoup4
+lxml
+colorama
+python-dotenv
+html5lib
+Jinja2
+urllib3
+certifi
+idna
+reportlab
+tqdm
+
