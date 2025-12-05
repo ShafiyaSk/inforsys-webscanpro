@@ -1,0 +1,44 @@
+{
+    "pages": [
+        "https://quotes.toscrape.com",
+        "https://quotes.toscrape.com/login",
+        "https://quotes.toscrape.com/author/Albert-Einstein",
+        "https://quotes.toscrape.com/tag/change/page/1",
+        "https://quotes.toscrape.com/tag/deep-thoughts/page/1",
+        "https://quotes.toscrape.com/tag/thinking/page/1",
+        "https://quotes.toscrape.com/tag/world/page/1",
+        "https://quotes.toscrape.com/author/J-K-Rowling",
+        "https://quotes.toscrape.com/tag/abilities/page/1",
+        "https://quotes.toscrape.com/tag/choices/page/1"
+    ],
+    "forms": {
+        "https://quotes.toscrape.com/login": [
+            {
+                "action": "https://quotes.toscrape.com/login",
+                "method": "post",
+                "inputs": [
+                    {
+                        "name": "csrf_token",
+                        "type": "hidden",
+                        "value": "wOUXAydzkSVoaushrbpPxeCiBgTRIqNKQLcfGWmlZtHYDMvFjJEn"
+                    },
+                    {
+                        "name": "username",
+                        "type": "text",
+                        "value": ""
+                    },
+                    {
+                        "name": "password",
+                        "type": "password",
+                        "value": ""
+                    },
+                    {
+                        "name": null,
+                        "type": "submit",
+                        "value": "Login"
+                    }
+                ]
+            }
+        ]
+    }
+}

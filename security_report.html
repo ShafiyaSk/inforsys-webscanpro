@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WebScanPro Security Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  background: radial-gradient(circle at top, #020617, #000);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 40px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #38bdf8;
+}
+
+.card {
+  background: linear-gradient(135deg, #020617, #1e293b);
+  padding: 25px;
+  margin: 25px auto;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #0ea5e9;
+  width: 90%;
+  font-size: 18px;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(8px);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 40px;
+  background: #020617;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #38bdf8;
+  padding: 16px;
+  font-size: 17px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+th {
+  background: #0284c7;
+}
+
+tr:nth-child(even) {
+  background: #020617;
+}
+
+tr:hover {
+  background: rgba(56,189,248, 0.15);
+  transition: 0.3s;
+}
+
+.high {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.medium {
+  color: #f97316;
+  font-weight: 600;
+}
+
+.low {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 35px;
+  margin-top: 40px;
+}
+
+.chart-box {
+  background: black;
+  padding: 20px;
+  border-radius: 18px;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 20px #0284c7;
+}
+
+canvas {
+  width: 100% !important;
+  height: 350px !important;
+}
+
+.remediation-box ul {
+  padding-left: 25px;
+}
+
+.remediation-box li {
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+.executive-summary {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 2px solid #38bdf8;
+  border-radius: 20px;
+  padding: 25px;
+  width: 90%;
+  margin: 25px auto;
+  line-height: 1.8;
+}
+
+.exec-item {
+  display: inline-block;
+  width: 23%;
+  background: #020617;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 5px;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 0 15px #0284c7;
+}
+
+.exec-item b {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+  color: #38bdf8;
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .card, .chart-box, .executive-summary {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+  table, th, td {
+    border: 1px solid black !important;
+    color: black !important;
+  }
+  th {
+    background: #eee !important;
+  }
+  canvas {
+    display: none;
+  }
+  h1, h2, h3 {
+    color: black !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔐 WebScanPro Advanced Security Report</h1>
+
+<div class="card">
+<b>Target:</b> http://testphp.vulnweb.com<br><br>
+<b>Scan Time:</b> 2025-11-28 17:12:31.858942<br>
+<b>Total Pages:</b> 53<br>
+<b>Total Forms:</b> 40<br>
+<b>Total Vulnerabilities:</b> 45
+</div>
+
+<h2>📊 Visual Analytics Dashboard</h2>
+
+<div class="dashboard">
+
+  <div class="chart-box">
+    <canvas id="barChart"></canvas>
+    <h3>Severity Distribution</h3>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="pieChart"></canvas>
+    <h3>Vulnerability Types</h3>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="donutChart"></canvas>
+    <h3>Safe vs Vulnerable</h3>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="lineChart"></canvas>
+    <h3>Phase-wise Risk</h3>
+  </div>
+
+</div>
+
+<script>
+
+new Chart(document.getElementById("barChart"), {
+  type: 'bar',
+  data: {
+    labels:['High','Medium','Low'],
+    datasets:[{
+      data:[7,37,1],
+      backgroundColor:['#ff0000','#ff9900','#00ff00']
+    }]
+  },
+  options: { responsive:true }
+});
+
+new Chart(document.getElementById("pieChart"), {
+  type: 'pie',
+  data: {
+    labels:['SQL','XSS','AUTH','IDOR'],
+    datasets:[{
+      data:[7,37,1,0],
+      backgroundColor:['#ef4444','#f97316','#22c55e','#38bdf8']
+    }]
+  }
+});
+
+new Chart(document.getElementById("donutChart"), {
+  type: 'doughnut',
+  data: {
+   labels:['Safe','Vulnerable'],
+   datasets:[{
+     data:[48,5],
+     backgroundColor:['#22c55e','#dc2626']
+   }]
+  }
+});
+
+new Chart(document.getElementById("lineChart"), {
+  type: 'line',
+  data: {
+    labels:['SQL','XSS','AUTH','IDOR'],
+    datasets:[{
+      data:[7,37,1,0],
+      borderColor:'#38bdf8',
+      fill:true,
+      tension:0.4
+    }]
+  }
+});
+
+</script>
+
+<h2>📋 Detailed Vulnerability Table</h2>
+
+<table>
+<tr>
+<th>Type</th>
+<th>Endpoint</th>
+<th>Severity</th>
+<th>Mitigation</th>
+</tr>
+
+
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>SQL Injection</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="high">High</td>
+        <td>Use parameterized queries & input validation</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/guestbook.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/secured/newuser.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/cart.php</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Cross Site Scripting (XSS)</td>
+        <td>http://testphp.vulnweb.com/search.php?test=query</td>
+        <td class="medium">Medium</td>
+        <td>Escape output & use CSP headers</td>
+    </tr>
+    
+    <tr>
+        <td>Weak Authentication</td>
+        <td>http://testphp.vulnweb.com/login.php</td>
+        <td class="low">Low</td>
+        <td>Add rate limiting & 2FA</td>
+    </tr>
+    
+
+</table>
+
+<div class="remediation-box">
+<h2>✅ Suggested Remediations</h2>
+
+<ul>
+<li><b>SQL Injection:</b> Always use prepared statements, parameterized queries and ORM methods. Never concatenate user inputs into SQL queries.</li>
+<li><b>Cross-Site Scripting (XSS):</b> Implement proper output encoding and use Content-Security-Policy (CSP) headers to restrict script execution.</li>
+<li><b>Weak Authentication:</b> Enable multi-factor authentication (MFA) and enforce strong passwords with rate limiting and CAPTCHA.</li>
+<li><b>IDOR Attacks:</b> Apply object-level authorization checks on the server side and never rely on user-controlled IDs.</li>
+<li><b>Cookies:</b> Set HttpOnly, Secure, and SameSite flags on all session cookies.</li>
+<li><b>Input Validation:</b> Use server-side validation and reject unexpected or malformed inputs.</li>
+<li><b>Access Control:</b> Follow the principle of least privilege (PoLP) and verify permissions for every request.</li>
+<li><b>Monitoring:</b> Enable logging and real-time alerting for suspicious activities.</li>
+<li><b>Regular Testing:</b> Perform scheduled vulnerability scanning and code reviews.</li>
+</ul>
+
+</div>
+
+<!-- Executive Summary at END -->
+<div class="executive-summary">
+  <h2>📌 Executive Summary</h2>
+  <div class="exec-item"><b>53</b> Pages Scanned</div>
+  <div class="exec-item"><b>40</b> Forms Detected</div>
+  <div class="exec-item"><b>45</b> Total Vulnerabilities</div>
+  <div class="exec-item"><b>7 High / 37 Medium / 1 Low</b> Risk</div>
+</div>
+
+
+</body>
+</html>

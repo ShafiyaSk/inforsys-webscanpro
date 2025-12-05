@@ -1,0 +1,45 @@
+{
+  "target": "http://localhost:8080/",
+  "started_at": "2025-11-25T13:07:50.811531Z",
+  "tests": [
+    {
+      "timestamp": "2025-11-25T13:07:50.868440Z",
+      "test": "cookie_flags",
+      "cookies": {}
+    },
+    {
+      "timestamp": "2025-11-25T13:07:50.985684Z",
+      "test": "default_credentials",
+      "username": "admin",
+      "password_tested": true,
+      "success": true,
+      "evidence_excerpt": "\r\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n\r\n\t<head>\r\n\t\t<meta http-equiv=\"Content-T"
+    },
+    {
+      "timestamp": "2025-11-25T13:07:51.733727Z",
+      "test": "bruteforce_sim",
+      "username": "admin",
+      "password_tried": true,
+      "success": true,
+      "response_len": 6808
+    },
+    {
+      "timestamp": "2025-11-25T13:07:52.055530Z",
+      "test": "session_rotation",
+      "pre_session_cookie": true,
+      "post_session_cookie": true,
+      "pre_value_redacted": true,
+      "post_value_redacted": true,
+      "rotated": false
+    },
+    {
+      "timestamp": "2025-11-25T13:07:53.335155Z",
+      "test": "logout_invalidation",
+      "login_success": true,
+      "protected_before_accessible": true,
+      "protected_after_accessible": true,
+      "logout_invalidation_ok": false
+    }
+  ],
+  "finished_at": "2025-11-25T13:07:53.335155Z"
+}
